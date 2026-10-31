@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapping vidéo</title>
+<link rel="stylesheet" href="vendor/coloris/coloris.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<canvas id="gl"></canvas>
+<canvas id="overlay"></canvas>
+<div id="hint" aria-live="polite"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<aside id="ui" aria-label="Réglages du mapping">
+  <header id="bar" title="Glisser pour déplacer le panneau">
+    <span class="grip" data-icon="grip-vertical"></span>
+    <strong>Mapping</strong>
+    <span class="tally" id="tally"><span class="dot"></span><span id="tallyText">Édition</span></span>
+    <button class="ib sm" id="openBtn" title="Ouvrir un projet (.json)" data-icon="folder-open"></button>
+    <button class="ib sm" id="saveBtn" title="Enregistrer le projet (.json)" data-icon="save"></button>
+  </header>
+
+  <div class="toolbar" role="toolbar" aria-label="Commandes générales">
+    <button class="ib" id="gridBtn" aria-pressed="false" title="Grille (G)" data-icon="grid-3x3"></button>
+    <label class="step" title="Pas de la grille en pixels"><input type="number" id="step" value="50" min="10" max="400" aria-label="Pas de la grille"> px</label>
+    <span class="sep"></span>
+    <button class="ib" id="restartAll" title="Tout reprendre au début" data-icon="skip-back"></button>
+    <button class="ib" id="playAll" title="Tout lire" data-icon="play"></button>
+    <button class="ib" id="pauseAll" title="Tout mettre en pause" data-icon="pause"></button>
+    <span class="sep"></span>
+    <button class="ib" id="fsBtn" aria-pressed="false" title="Plein écran (F)" data-icon="maximize"></button>
+    <button class="ib" id="liveBtn" title="Passer en diffusion (H)" data-icon="monitor-play"></button>
+    <button class="ib" id="keysBtn" title="Raccourcis clavier (?)" data-icon="keyboard"></button>
+  </div>
+
+  <div class="scroll">
+    <details open>
+      <summary>Calques <span class="muted" id="count"></span>
+        <span class="actions">
+          <button class="ib sm" id="linkBtn" title="Relier les fichiers à recharger (sélection multiple)" data-icon="link" disabled></button>
+          <button class="ib sm" id="addBtn" title="Ajouter un calque vidéo" data-icon="plus"></button>
+          <button class="ib sm" id="camsBtn" title="Détecter les caméras et cartes de capture" data-icon="camera"></button>
+        </span>
+      </summary>
+      <ol id="layers" aria-label="Calques, du premier plan à l'arrière-plan"></ol>
+    </details>
+
+    <details open>
+      <summary><span class="name" id="inspName"></span></summary>
+      <div class="sec">
+        <p class="empty" id="inspEmpty">Clique sur un calque, sur la scène ou dans la liste, pour le régler.</p>
+        <div id="inspBody">
+          <div class="field">
+            <span class="lbl">Source</span>
+            <button class="btn wide" id="pickBtn"><i data-icon="file-video-camera"></i>Choisir une vidéo…</button>
+            <select id="camSel" aria-label="Caméra ou carte de capture"><option value="">Ou une caméra / carte de capture</option></select>
+          </div>
+          <div class="field">
+            <span class="lbl">Cadrage</span>
+            <div class="seg" id="fitSeg" role="radiogroup" aria-label="Cadrage de la vidéo">
+              <button role="radio" data-v="cover" title="Remplit la surface, quitte à rogner la vidéo">Couvrir</button>
+              <button role="radio" data-v="contain" title="Montre toute la vidéo, quitte à laisser des bandes">Contenir</button>
+              <button role="radio" data-v="free" title="Étire la vidéo sur les 4 coins">Libre</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="lbl">Lecture</span>
+            <div class="row">
+              <button class="ib" id="playBtn" title="Lecture / pause (Espace)" data-icon="play"></button>
+              <button class="ib" id="loopBtn" aria-pressed="true" title="Lecture en boucle" data-icon="repeat"></button>
+            </div>
+          </div>
+          <div class="field">
+            <label class="lbl" for="volume">Volume <output id="volOut"></output></label>
+            <div class="row nowrap">
+              <button class="ib" id="muteBtn" aria-pressed="false" title="Couper / rétablir le son" data-icon="volume-x"></button>
+              <input type="range" id="volume" class="vol" min="0" max="100" title="Volume · la couleur montre le niveau sonore en cours">
+            </div>
+          </div>
+          <div class="field">
+            <label class="lbl" for="opacity">Opacité <output id="opOut"></output></label>
+            <input type="range" id="opacity" min="0" max="100">
+          </div>
+          <div class="field">
+            <label class="lbl" for="blur">Flou <output id="blurOut"></output></label>
+            <input type="range" id="blur" min="0" max="60" title="Rayon du flou, en pixels de la vidéo">
+          </div>
+          <div class="field">
+            <label class="lbl" for="blendSel">Mode de fusion</label>
+            <select id="blendSel" class="flush">
+              <option value="normal">Normal</option>
+              <option value="add" title="Additionne la lumière : idéal pour superposer des effets sur fond noir">Addition</option>
+              <option value="screen" title="Éclaire sans saturer : le noir devient transparent">Écran</option>
+              <option value="multiply" title="Assombrit : le blanc devient transparent">Produit</option>
+              <option value="lighten" title="Garde le plus clair des deux">Éclaircir</option>
+              <option value="darken" title="Garde le plus sombre des deux">Assombrir</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="lbl">Transformer</span>
+            <div class="row" id="xfRow">
+              <button class="ib" data-xf="rot-" title="Pivoter de -15°" data-icon="rotate-ccw"></button>
+              <button class="ib" data-xf="rot+" title="Pivoter de +15°" data-icon="rotate-cw"></button>
+              <button class="ib" data-xf="zoom-" title="Réduire (-)" data-icon="zoom-out"></button>
+              <button class="ib" data-xf="zoom+" title="Agrandir (+)" data-icon="zoom-in"></button>
+              <span class="sep"></span>
+              <button class="ib" data-xf="reset" title="Réinitialiser la forme (R)" data-icon="undo-2"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details open>
+      <summary>Fond</summary>
+      <div class="sec">
+        <div class="row">
+          <input id="bgColor" value="#000000" aria-label="Couleur de fond">
+          <button class="btn" id="bgPickBtn"><i data-icon="image-plus"></i>Image ou vidéo…</button>
+          <button class="ib danger" id="bgClear" title="Retirer l'image ou la vidéo de fond" data-icon="trash-2" disabled></button>
+        </div>
+        <p class="muted bgname" id="bgName"></p>
+        <div class="seg" id="bgFitSeg" role="radiogroup" aria-label="Cadrage du fond">
+          <button role="radio" data-v="cover" title="Remplit l'écran, quitte à rogner">Couvrir</button>
+          <button role="radio" data-v="contain" title="Montre toute l'image, quitte à laisser des bandes">Contenir</button>
+          <button role="radio" data-v="mosaic" title="Répète l'image à sa taille d'origine">Mosaïque</button>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <footer><span id="fps"></span><span id="res"></span></footer>
+</aside>
+
+<dialog id="keys" aria-labelledby="keysTitle">
+  <header><h2 id="keysTitle">Raccourcis</h2><button class="ib" id="keysClose" title="Fermer" data-icon="x"></button></header>
+  <dl>
+    <dt>Clic / glisser</dt><dd>Sélectionner / déplacer un calque</dd>
+    <dt>Coin (carré)</dt><dd>Déformer · avec <kbd>Maj</kbd> : redimensionner</dd>
+    <dt>Milieu d'un bord (rond)</dt><dd>Agrandir / réduire en gardant les proportions</dd>
+    <dt>Poignée ronde</dt><dd>Pivoter · avec <kbd>Maj</kbd> : par pas de 15°</dd>
+    <dt>Double-clic</dt><dd>Changer la vidéo du calque</dd>
+    <dt>Molette</dt><dd>Redimensionner · avec <kbd>Alt</kbd> : pivoter</dd>
+    <dt>Glisser un fichier</dt><dd>Vidéo : nouveau calque ou remplacement · image : fond · un fichier à recharger retrouve son calque par son nom</dd>
+    <dt><kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd></dt><dd>Ajuster au pixel · avec <kbd>Maj</kbd> : ×10</dd>
+    <dt><kbd>+</kbd> <kbd>-</kbd></dt><dd>Agrandir / réduire</dd>
+    <dt><kbd>1</kbd>…<kbd>9</kbd> · <kbd>Tab</kbd></dt><dd>Sélectionner un calque · un coin</dd>
+    <dt><kbd>Page↑</kbd> <kbd>Page↓</kbd></dt><dd>Passer devant / derrière</dd>
+    <dt><kbd>Espace</kbd></dt><dd>Lecture / pause du calque</dd>
+    <dt><kbd>L</kbd> · <kbd>R</kbd></dt><dd>Verrouiller · réinitialiser la forme</dd>
+    <dt><kbd>G</kbd> · <kbd>F</kbd></dt><dd>Grille · plein écran</dd>
+    <dt><kbd>H</kbd> · <kbd>Échap</kbd></dt><dd>Passer en diffusion · revenir en édition</dd>
+  </dl>
+</dialog>
+
+<input type="file" id="pick" accept="video/*" hidden>
+<input type="file" id="bgPick" accept="image/*,video/*" hidden>
+<input type="file" id="projPick" accept=".json,application/json" hidden>
+<input type="file" id="linkPick" accept="video/*,image/*" multiple hidden>
+
+<script src="vendor/lucide/icons.js"></script>
+<script src="vendor/coloris/coloris.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
