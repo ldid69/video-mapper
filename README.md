@@ -1,4 +1,4 @@
-# 🎃 Video Mapper
+# Video Mapper
 
 **Projetez vos vidéos sur n'importe quelle surface, directement depuis le navigateur.**
 **Project your videos onto any surface, straight from the browser.**
@@ -17,14 +17,14 @@ Une façade de maison pour Halloween, une vitrine, un décor de théâtre, une s
 
 Branchez un vidéoprojecteur, ouvrez `index.html` dans Chrome ou Edge, glissez vos vidéos, ajustez les quatre coins… et c'est en place. Pas d'installation, pas de compte, pas de serveur, pas de licence : **un dossier, un navigateur, c'est tout.**
 
-### ✨ Pourquoi Video Mapper ?
+### Pourquoi Video Mapper ?
 
 - **Zéro installation** : une page HTML et du JavaScript pur. Fonctionne hors ligne, même sur une machine sans droits administrateur.
 - **Rendu GPU (WebGL2)** : correction de perspective exacte (homographie) calculée sur la carte graphique, fluide même avec plusieurs vidéos HD.
 - **Pensé pour le terrain** : grandes poignées, réglage au pixel au clavier, mode diffusion en un appui, sauvegarde automatique. On règle en quelques minutes, dans le noir, sur une échelle.
 - **Léger et lisible** : environ 1 000 lignes de code sans framework ni étape de compilation. Facile à comprendre, à modifier et à faire évoluer.
 
-### 🎬 Fonctionnalités
+### Fonctionnalités
 
 #### Calques vidéo illimités
 - Ajoutez autant de calques que nécessaire, chacun avec sa propre vidéo.
@@ -67,7 +67,7 @@ Branchez un vidéoprojecteur, ouvrez `index.html` dans Chrome ou Edge, glissez v
 - Une vidéo déposée sur un calque le remplace, ailleurs elle crée un nouveau calque.
 - Une image déposée devient le fond.
 
-### ⌨️ Raccourcis clavier
+### Raccourcis clavier
 
 | Touche | Action |
 |---|---|
@@ -83,16 +83,16 @@ Branchez un vidéoprojecteur, ouvrez `index.html` dans Chrome ou Edge, glissez v
 | `?` | Afficher l'aide des raccourcis |
 | Double-clic | Changer la vidéo du calque |
 
-### 🚀 Démarrage
+### Démarrage
 
 1. Clonez ou téléchargez le dépôt.
 2. Ouvrez `index.html` dans **Chrome ou Edge** récent (WebGL2 requis).
 3. Branchez le vidéoprojecteur en écran étendu, glissez la fenêtre dessus.
-4. Ajoutez vos vidéos, calez les coins sur vos surfaces, appuyez sur `H`. 🎃
+4. Ajoutez vos vidéos, calez les coins sur vos surfaces, appuyez sur `H`.
 
-> 💡 Pour utiliser une **webcam ou une carte de capture**, le navigateur exige un contexte sécurisé : servez le dossier en local, par exemple avec `npx serve` ou `python -m http.server`, puis ouvrez `http://localhost:…`.
+> Pour utiliser une **webcam ou une carte de capture**, le navigateur exige un contexte sécurisé : servez le dossier en local, par exemple avec `npx serve` ou `python -m http.server`, puis ouvrez `http://localhost:…`.
 
-### 🛠️ Pour les développeurs
+### Pour les développeurs
 
 ```
 index.html            Structure de l'interface
@@ -118,14 +118,14 @@ A house front for Halloween, a shop window, a stage set, a sculpture, a concert 
 
 Plug in a projector, open `index.html` in Chrome or Edge, drop your videos, drag the four corners… done. No install, no account, no server, no license: **one folder, one browser, that's it.**
 
-### ✨ Why Video Mapper?
+### Why Video Mapper?
 
 - **Zero install**: one HTML page and plain JavaScript. Works offline, even on a machine without admin rights.
 - **GPU rendering (WebGL2)**: exact perspective correction (homography) computed on the graphics card, smooth even with several HD videos.
 - **Built for real-world setups**: large handles, pixel-perfect keyboard nudging, one-key live mode, automatic saving. Calibrate in minutes, in the dark, on a ladder.
 - **Small and readable**: about 1,000 lines of code, no framework, no build step. Easy to understand, change and extend.
 
-### 🎬 Features
+### Features
 
 #### Unlimited video layers
 - Add as many layers as you need, each with its own video.
@@ -168,7 +168,7 @@ Plug in a projector, open `index.html` in Chrome or Edge, drop your videos, drag
 - A video dropped on a layer replaces it; anywhere else it creates a new layer.
 - A dropped image becomes the background.
 
-### ⌨️ Keyboard shortcuts
+### Keyboard shortcuts
 
 | Key | Action |
 |---|---|
@@ -184,16 +184,16 @@ Plug in a projector, open `index.html` in Chrome or Edge, drop your videos, drag
 | `?` | Show shortcut help |
 | Double-click | Change the layer's video |
 
-### 🚀 Getting started
+### Getting started
 
 1. Clone or download the repository.
 2. Open `index.html` in a recent **Chrome or Edge** (WebGL2 required).
 3. Connect the projector as an extended display and move the window onto it.
-4. Add your videos, snap the corners to your surfaces, press `H`. 🎃
+4. Add your videos, snap the corners to your surfaces, press `H`.
 
-> 💡 To use a **webcam or capture card**, the browser requires a secure context: serve the folder locally, e.g. with `npx serve` or `python -m http.server`, then open `http://localhost:…`.
+> To use a **webcam or capture card**, the browser requires a secure context: serve the folder locally, e.g. with `npx serve` or `python -m http.server`, then open `http://localhost:…`.
 
-### 🛠️ For developers
+### For developers
 
 ```
 index.html            UI structure
@@ -211,6 +211,6 @@ vendor/               Lucide (icons, ISC) and Coloris (color picker, MIT)
 
 ---
 
-## 📄 Licence / License
+## Licence / License
 
 [MIT](LICENSE) © 2026 Studio-Atlantic. Libre d'utilisation, de modification et de redistribution, y compris commerciale. / Free to use, modify and redistribute, including commercially.
