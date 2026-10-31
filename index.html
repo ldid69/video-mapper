@@ -20,6 +20,7 @@
     <span class="tally" id="tally"><span class="dot"></span><span id="tallyText">Édition</span></span>
     <button class="ib sm" id="openBtn" title="Ouvrir un projet (.json)" data-icon="folder-open"></button>
     <button class="ib sm" id="saveBtn" title="Enregistrer le projet (.json)" data-icon="save"></button>
+    <button class="ib sm danger" id="resetBtn" title="Nouvelle scène : tout réinitialiser" data-icon="trash-2"></button>
   </header>
 
   <div class="toolbar" role="toolbar" aria-label="Commandes générales">
@@ -153,6 +154,17 @@
     <dt><kbd>G</kbd> · <kbd>F</kbd></dt><dd>Grille · plein écran</dd>
     <dt><kbd>H</kbd> · <kbd>Échap</kbd></dt><dd>Passer en diffusion · revenir en édition</dd>
   </dl>
+</dialog>
+
+<dialog id="resetDlg" aria-labelledby="resetTitle">
+  <form method="dialog">
+    <header><h2 id="resetTitle">Tout réinitialiser ?</h2></header>
+    <p>Tous les calques, leurs réglages et le fond seront supprimés. Pense à enregistrer le projet avant si tu veux le garder.</p>
+    <footer>
+      <button class="btn" value="cancel" autofocus>Annuler</button>
+      <button class="btn danger" value="reset">Tout réinitialiser</button>
+    </footer>
+  </form>
 </dialog>
 
 <input type="file" id="pick" accept="video/*" hidden>

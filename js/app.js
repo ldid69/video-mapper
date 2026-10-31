@@ -905,6 +905,13 @@ function applyProject(p) {
   select(0); save();
 }
 $('#saveBtn').onclick = exportProject;
+const resetDlg = $('#resetDlg');
+$('#resetBtn').onclick = () => { resetDlg.returnValue = ''; resetDlg.showModal(); };
+resetDlg.onclose = () => {   // scène vierge, comme au premier lancement
+  if (resetDlg.returnValue !== 'reset') return;
+  applyProject(parseProject({ app: 'mapping-video', layers: [{}] }));
+  toast('Scène réinitialisée');
+};
 $('#openBtn').onclick = () => { const p = $('#projPick'); p.value = ''; p.click(); };
 $('#projPick').onchange = async e => {
   const f = e.target.files[0];

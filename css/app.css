@@ -209,6 +209,10 @@ dialog h2 { margin: 0; font-size: 15px; }
 dialog dl { display: grid; grid-template-columns: max-content 1fr; gap: 9px 16px; margin: 0; padding: 16px; line-height: 1.4; }
 dialog dt { color: var(--muted); }
 dialog dd { margin: 0; }
+dialog p { margin: 0; padding: 16px; line-height: 1.5; max-width: 380px; }
+dialog footer { display: flex; justify-content: flex-end; gap: 8px; padding: 0 16px 16px; }
+.btn.danger { color: var(--danger); }
+.btn.danger:hover { background: rgba(255, 107, 94, .12); }
 kbd {
   display: inline-block; min-width: 1.6em; padding: 0 5px; margin: 0 1px; text-align: center;
   background: var(--raised); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px;
